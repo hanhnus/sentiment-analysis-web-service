@@ -45,7 +45,7 @@ By monitoring attitudes and opinions about cards continuously, customers are als
 ### Deploy Sentiment Analysis Server in Docker
 
 #### Step 1: Build Docker image from Dockefile
-Download https://github.com/atomic-app/sentiment-docker/blob/master/Dockerfile and other project files to ~/Documents/Dockerfiles/sentiment_analysis/
+Download https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/Dockerfile and other project files to ~/Documents/Dockerfiles/sentiment_analysis/
 ```
 docker build -t sentiment_analysis_image:v1.0 ~/Documents/Dockerfiles/sentiment_analysis/
 ```
@@ -58,7 +58,7 @@ docker image ls
 ```
 docker run --name sentiment_analysis_container -p 99 -dit sentiment_analysis_image:v1.0
 ```
-The port needs to be aligned with the one in https://github.com/atomic-app/sentiment-docker/blob/master/app.py.
+The port needs to be aligned with the one in https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/app.py.
 
 #### Step 3: Attach the container and run services
 ```
@@ -139,7 +139,7 @@ A bad request, as an example, is tested in Swagger UI as showed below (which con
 
 ### AWS Deployment
 
-https://github.com/atomic-app/sentiment-docker/blob/master/AWS_Deployment/README.md
+https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/AWS_Deployment/README.md
 
 ## Maintainers
 
@@ -147,5 +147,5 @@ https://github.com/atomic-app/sentiment-docker/blob/master/AWS_Deployment/README
 
 ## Contributing
 
-Feel free to dive in! [Open an issue](https://github.com/atomic-app/sentiment-docker/issues/new) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/hanhnus/sentiment-analysis-web-service/issues/new) or submit PRs.
  
