@@ -1,0 +1,89 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description:              VPC for Sentiment-Analysis-app ECS
+
+Resources:
+
+  VPC:
+    Type:      'AWS::EC2::VPC'
+    Properties:
+      CidrBlock:            '10.0.0.0/16'  # IP range available within the VPC
+      EnableDnsSupport:     true
+      EnableDnsHostnames:   true           # the instances launched within the VPC get hosts names
+      InstanceTenancy:      default
+
+  Subnet1:
+    Type:      AWS::EC2::Subnet
+    Properties:
+      VpcId:                !Ref VPC                 # the VPC defined above (the VPC the submet belongs to)
+      AvailabilityZone:     !Select [0, !GetAZs '']  # 0 - pick the 1st AZ available
+      CidrBlock:            !Sub '10.0.0.0/20'       # for the subnet within the VPC
+      MapPublicIpOnLaunch:  true
+
+  Subnet2:
+    Type:      AWS::EC2::Subnet
+    Properties:
+      VpcId:                !Ref VPC
+      AvailabilityZone:     !Select [1, !GetAZs '']
+      CidrBlock:            !Sub '10.0.32.0/20'
+      MapPublicIpOnLaunch:  true
+
+  # to allow internet connection to the VPC or resrouces within VPS or subnets
+  InternetGateway:
+    Type:      'AWS::EC2::InternetGateway'
+
+  VPCGatewayAttachment:
+    Type:      'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      InternetGatewayId:    !Ref InternetGateway  # Internet Gateway ID
+      VpcId:                !Ref VPC              # VPC ID in the same stack
+
+  RouteTable:
+    Type:      'AWS::EC2::RouteTable'
+    Properties:
+      VpcId:                !Ref VPC
+
+  # to associate the route table to both of the subnets
+  RouteTableAssociation1:
+    Type:      'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId:             !Ref Subnet1
+      RouteTableId:         !Ref RouteTable
+
+  RouteTableAssociation2:
+    Type:      'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId:             !Ref Subnet2
+      RouteTableId:         !Ref RouteTable
+
+  # to link the internet gateway and route table,
+  # and defines destination address to allow the connections 
+  InternetRoute:
+    Type:      'AWS::EC2::Route'
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      GatewayId:            !Ref InternetGateway
+      RouteTableId:         !Ref RouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+
+
+# to output some of the resource identifiers we need to refer in the stack to create next
+# the outputs can be referenced in other stacks
+Outputs:
+
+  VPC:
+    Description: VPC
+    Value:       !Ref VPC
+    Export:
+      Name:      'VPC'
+
+  Subnet1:
+    Description: 'Subnet 1 on AZ1'
+    Value:       !Ref Subnet1
+    Export:
+      Name:      'Subnet1'
+
+  Subnet2:
+    Description: 'Subnet 2 on AZ2'
+    Value:       !Ref Subnet2
+    Export:
+      Name:      'Subnet2'
