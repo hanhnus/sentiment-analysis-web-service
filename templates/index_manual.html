@@ -1,0 +1,19 @@
+<html>
+
+<head>
+    {% if title %}
+        <title> {{title}} </title>
+    {% else %}
+        <title> Flask App </title>
+    {% endif %}
+</head>
+
+<body>
+    <h1> Hello, world! </h1>
+    <p> {{title}} </p>
+    {% for p in data %}
+        <p> {{ p }} </p>
+    {% endfor%}
+</body>
+
+</html>
