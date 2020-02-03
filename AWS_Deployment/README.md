@@ -33,7 +33,7 @@ docker push 568495135738.dkr.ecr.ap-southeast-2.amazonaws.com/sentiment-analysis
 
 ## Create CloudFormation Stack (All-in-one)
 
-The Yaml file https://github.com/atomic-app/sentiment-docker/blob/master/AWS_Deployment/all-in-one.yml will create or define VPC, subnets, internet gateway, route table, IAM roles(for the container), ECS cluster, application load balancer, load balance listner, CloudWatch Log Group, security groups and ECS task.
+The Yaml file https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/AWS_Deployment/all-in-one.yml will create or define VPC, subnets, internet gateway, route table, IAM roles(for the container), ECS cluster, application load balancer, load balance listner, CloudWatch Log Group, security groups and ECS task.
 
 ```
 aws2 cloudformation create-stack --stack-name all-in-one --template-body file://~/Documents/AWS/CloudFormation/Docker-on-ECS/infra_sentiment_analysis/all-in-one.yml
@@ -44,7 +44,7 @@ aws2 cloudformation create-stack --stack-name all-in-one --template-body file://
 
 ## Switch between ML Models running in AWS
 
-By running the Shell file https://github.com/atomic-app/sentiment-docker/blob/master/AWS_Deployment/deploy_app.sh, the ML model running behind the app can be switched within a short time. The Docker Image with the new model needs to be uploaded together with app as an ECR Image. And either one of below statements can be run or commented in the Shell file.
+By running the Shell file https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/AWS_Deployment/deploy_app.sh, the ML model running behind the app can be switched within a short time. The Docker Image with the new model needs to be uploaded together with app as an ECR Image. And either one of below statements can be run or commented in the Shell file.
 
 Switch from Vader sentiment model to Support Vector Classifier model:
 ```
@@ -65,7 +65,7 @@ Create CloudFormation stack to define infrastructure and resources to run the co
 ### VPC Stack
 
 VPC Stack CloudFormation template:
-https://github.com/atomic-app/sentiment-docker/blob/master/AWS_Deployment/step-by-step/vpc.yml
+https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/AWS_Deployment/step-by-step/vpc.yml
 
 The creating of VPC and subnets will also involve defining internet gateway, route tables and so on.
 
@@ -83,7 +83,7 @@ Result can be varified in CloudFormation
 ### IAM Stack
 
 IAM Stack CloudFormation template:
-https://github.com/atomic-app/sentiment-docker/blob/master/AWS_Deployment/step-by-step/iam.yml to create IAM roles for the containers to be able to interact with CloudWatch and ECR.
+https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/AWS_Deployment/step-by-step/iam.yml to create IAM roles for the containers to be able to interact with CloudWatch and ECR.
 
 ```
 aws2 cloudformation create-stack --stack-name iam --template-body file://~/Documents/AWS/CloudFormation/Docker-on-ECS/infra_sentiment_analysis/iam.yml --capabilities CAPABILITY_IAM
@@ -98,7 +98,7 @@ Successful response:
 ### ECS Cluster Stack
 
 ECS Cluster Stack CloudFormation template:
-https://github.com/atomic-app/sentiment-docker/blob/master/AWS_Deployment/step-by-step/app-cluster.yml to create ECS cluster, application load balancer, load balance listner & CloudWatch Log Group (for container application logs); also create several security groups.
+https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/AWS_Deployment/step-by-step/app-cluster.yml to create ECS cluster, application load balancer, load balance listner & CloudWatch Log Group (for container application logs); also create several security groups.
 
 ```
 aws2 cloudformation create-stack --stack-name sentiment-analyser-cluster  --template-body file://~/Documents/AWS/CloudFormation/Docker-on-ECS/infra_sentiment_analysis/app-cluster.yml
@@ -113,7 +113,7 @@ Successful response:
 ### ECS Task Stack
 
 ECS Task Stack CloudFormation template:
-https://github.com/atomic-app/sentiment-docker/blob/master/AWS_Deployment/step-by-step/api.yml to create the task that deploys our container image from ECR repo into ECS cluster.
+https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/AWS_Deployment/step-by-step/api.yml to create the task that deploys our container image from ECR repo into ECS cluster.
 
 ```
 aws2 cloudformation create-stack --stack-name api --template-body file://~/Documents/AWS/CloudFormation/Docker-on-ECS/infra_sentiment_analysis/api.yml
