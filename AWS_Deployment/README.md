@@ -40,7 +40,7 @@ aws2 cloudformation create-stack --stack-name all-in-one --template-body file://
 ```
 
 ## CloudWatch Metrics
-<img src="https://github.com/atomic-app/sentiment-docker/blob/master/images/CloudWatch_metrics.png"/>
+<img src="https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/images/CloudWatch_metrics.png"/>
 
 ## Switch between ML Models running in AWS
 
