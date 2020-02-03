@@ -80,7 +80,7 @@ docker port sentiment_analysis
 ```
 
 #### Sample Response
-<img src="https://github.com/atomic-app/sentiment-docker/blob/master/images/UI_browser.png" width="600"/>
+<img src="https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/images/UI_browser.png" width="600"/>
 
 
 ### Send cURL Request in Terminal
@@ -96,7 +96,7 @@ curl --header "Content-Type: application/json" --request POST --data '{"sentence
 ```
 #### Sample Response
 
-<img src="https://github.com/atomic-app/sentiment-docker/blob/master/images/cURL_request.png" width="500"/>
+<img src="https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/images/cURL_request.png" width="500"/>
 
 
 ## API Testing
@@ -123,19 +123,19 @@ Tests cover:
 &emsp;&emsp;&emsp; -- key is not string  
 &emsp; - ML model tests  
 
-<img src="https://github.com/atomic-app/sentiment-docker/blob/master/images/unit_test_result.png"/>
+<img src="https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/images/unit_test_result.png"/>
 
 ### API Testing (Swagger UI)
 
 A bad request, as an example, is tested in Swagger UI as showed below (which contains no English letter in the input sentence), the correct error code and error message are responded.
 
-<img src="https://github.com/atomic-app/sentiment-docker/blob/master/images/swager_API_test_1.png"/>
+<img src="https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/images/swager_API_test_1.png"/>
 
-<img src="https://github.com/atomic-app/sentiment-docker/blob/master/images/swager_API_test_2.png"/>
+<img src="https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/images/swager_API_test_2.png"/>
 
 ## Running in AWS
 
-<img src="https://github.com/atomic-app/sentiment-docker/blob/master/images/access_service_thr__public_IP_(AWS).png"/>
+<img src="https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/images/access_service_thr__public_IP_(AWS).png"/>
 
 ### AWS Deployment
 
