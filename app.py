@@ -1,25 +1,20 @@
 import nltk
 import re
-import json
 import logging
 import os.path
 import sys
-from datetime import datetime, timedelta
 from flask                        import Flask, request, jsonify, render_template, flash
 from flask_bootstrap              import Bootstrap
-from flask_script                 import Manager, Command
-from healthcheck                  import HealthCheck, EnvironmentDump
-from apscheduler.schedulers.background import BackgroundScheduler
 # from flask_sqlalchemy             import SQLAlchemy
 from form_utilities.config        import Config
 from form_utilities.forms         import RegisterForm
+# from flask_json                   import FlaskJSON, JsonError, json_response, as_json
 from nltk.sentiment.vader         import SentimentIntensityAnalyzer
 from sklearn.linear_model         import LogisticRegression
 from testing.swagger_ui           import blueprint_swagger
 from utilities.model_file         import load_model_file
 from utilities.text               import text_predict
 from sklearn.pipeline             import Pipeline
-from train                        import svc_model
 
 
 HTTP_BAD_REQUEST = 400
@@ -32,9 +27,10 @@ nltk.download('punkt')
 
 
 # Flask setting
-app         = Flask(__name__)
-bootstrap   = Bootstrap(app)
+app        = Flask(__name__)
+bootstrap  = Bootstrap(app)
 app.config.from_object(Config)
+
 
 # Logging setting
 logging.basicConfig(level  = logging.INFO,
@@ -42,91 +38,14 @@ logging.basicConfig(level  = logging.INFO,
 app_logger = logging.getLogger("app_logger")
 
 
-# Service status check setting (every 30 seconds)
-def test_service():
-    JSON_healthcheck   = health.check()[0]
-    dict_healthcheck   = json.loads(JSON_healthcheck)
-    result_healthcheck = dict_healthcheck['results'][0]['output']
-
-    if 'Request Response Time OK' in result_healthcheck:
-        if 'but WRONG Prediction' not in result_healthcheck:
-            app_logger.info('I am working... and Request Response Time OK :-)')
-            app_logger.info(dict_healthcheck)
-        else:
-            app_logger.info('I am working... but WRONG prediction!!! :-(')
-            app_logger.info(dict_healthcheck)
-    else:
-        app_logger.info('I am working... BUT Response Timeout!!! :-(')
-        app_logger.info(dict_healthcheck)
-
-scheduler = BackgroundScheduler()
-job = scheduler.add_job(test_service,
-                        'interval',
-                        seconds = 30)
-scheduler.start()
-
-# Heathcheck setting
-# wrap the flask app and give a heathcheck url
-health  = HealthCheck(app,     "/healthcheck")
-envdump = EnvironmentDump(app, "/environment")
-
-# healthcheck function
-def prediction_model_available():
-
-    test_text = "In addition to Hoffman 's powerful acting clinic , "                   \
-                "this is that rare drama that offers a thoughtful "                     \
-                "and rewarding glimpse into the sort of heartache everyone has felt , " \
-                "or will feel someday."
-
-    # record the time span for a test prediction
-    time_healthcheck_start = datetime.now()
-    score_test_text        = svc_model.predict_text(test_text)
-    time_healthcheck_end   = datetime.now()
-
-    time_delta             = time_healthcheck_end - time_healthcheck_start
-
-    if time_delta <= timedelta(seconds = 2):
-        if score_test_text == 5:
-            return True,  "Request Response Time OK: " + str(time_delta)
-        else:
-            return True, "Request Response Time OK: " + str(time_delta)    \
-                        + ", but WRONG Prediction: " + str(score_test_text) \
-                        + " != 5"
-    else:
-        return True, "Request Response Timeout (>2s): " + str(time_delta)
-
-
-
-'''
-{
-"hostname":  "MacBook-Pro-7.local", 
-"status":    "success", 
-"timestamp": 1579556197.551977, 
-"results":   [{"checker":   "prediction_model_available", 
-               "output":    "Request Response Time OK: 0:00:00.006485", 
-               "passed":    true, 
-               "timestamp": 1579556197.55191, 
-               "expires":   1579556224.55191}]
-}
-'''
-
-health.add_check(prediction_model_available)
-
-
-# environment dump function
-def application_data():
-	return {"maintainer": "Han Han",
-	        "git_repo":   "https://github.com/atomic-app/sentiment-docker"}
-
-envdump.add_section("application", application_data)
-
 # Register blueprint_swagger in app
 app.register_blueprint(blueprint_swagger)
 
 
 # Load model
-filename = "sentiment_model_pickle"               # Logistic Regression model
-#filename = "sentiment_model_pickle_default_sia"   # Sentiment Intensity Analysis model
+
+#filename = "sentiment_model_pickle"               # Logistic Regression model
+filename = "sentiment_model_pickle_default_sia"   # Sentiment Intensity Analysis model
 
 if os.path.exists(str(filename)):
     model_files = load_model_file(filename, app_logger)
@@ -276,8 +195,9 @@ def index():
             str_prediction = "Positive: " + str(dict_score["pos"]) + "  |  " + \
                              "Negative: " + str(dict_score["neg"]) + "  |  " + \
                              "Neutral: "  + str(dict_score["neu"]) + "  |  " + \
-                             "Compound: " + str(dict_score["compound"])      + \
-                             "  (Sentiment Intensity Analyzer)"
+                             "Compound: " + str(dict_score["compound"])      
+                             #+ \
+                             #"  (Sentiment Intensity Analyzer)"
 
         elif type(model) is Pipeline and type(model['clf']) is LogisticRegression:
             str_prediction = "Score: " + str(dict_score['score']) + \
@@ -286,9 +206,6 @@ def index():
         flash(str_prediction, category = "success")
 
     return render_template('index.html', title = title, form = form)
-
-
-
 
 
 # Helper Methods
@@ -301,9 +218,6 @@ def respond_with(message):
     return response
 
 
-
-
 if __name__ == '__main__':
-    #manager.run()
     app.run(debug = True, port = 99, host ='0.0.0.0')
     # using host: can access from other PC, otherwise local host
