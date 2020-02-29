@@ -3,7 +3,10 @@
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![standard-readme compliant](https://img.shields.io/badge/coverage-78%25-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-### NLTK-based sentiment analysis
+## Architecture
+
+<img src="https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/images/Project_Architecture.png"/>
+
 
 ## Table of Contents
 
