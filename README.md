@@ -5,7 +5,7 @@
 
 ## Architecture
 
-<img src="https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/images/Project_Architecture.png"/>
+<img src="https://github.com/hanhnus/sentiment-analysis-web-service/blob/master/images/Architecture.png"/>
 
 
 ## Table of Contents
